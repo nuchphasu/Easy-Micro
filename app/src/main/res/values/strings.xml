@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Easy Micro</string>
-
-
     <string name="singUp">Sign Up</string>
-
+    <string name="name">Name :</string>
+    <string name="user">User :</string>
+    <string name="password">Password :</string>
 </resources>
