@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Easy Micro</string>
+
+
+    <string name="singUp">Sign Up</string>
+
 </resources>
