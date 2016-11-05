@@ -1,6 +1,9 @@
 package stars.v.nuchphasu.easymicro;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +20,7 @@ public class SignUpActivity extends AppCompatActivity {
     private ImageView imageView;
     private Button button;
     private String nameString, userString, passwordString;
+    private Uri uri;
 
 
     @Override
@@ -65,7 +69,7 @@ public class SignUpActivity extends AppCompatActivity {
                 //Intent to Other App
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("image/*");
-                startActivityForResult(Intent.createChooser(intent, "โปรดเลือกแอฟดูรูป"),0);
+                startActivityForResult(Intent.createChooser(intent, "โปรดเลือกแอฟดูรูป"), 0);
             }//click
         });//onclickListener
 
@@ -78,6 +82,15 @@ public class SignUpActivity extends AppCompatActivity {
         if ((requestCode == 0) && (resultCode == RESULT_OK)) {
             //Result Success
             Log.d("5novV1", "Result OK");
+
+            //Setup Choose Image to ImageView
+            uri = data.getData();
+            try {
+                Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
+                imageView.setImageBitmap(bitmap);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
 
         }//if
