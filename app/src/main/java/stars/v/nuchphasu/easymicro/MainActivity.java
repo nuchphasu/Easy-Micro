@@ -24,6 +24,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import static stars.v.nuchphasu.easymicro.R.id.button2;
+import static stars.v.nuchphasu.easymicro.R.id.image;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -157,7 +158,13 @@ public class MainActivity extends AppCompatActivity {
                 } else if (passwordString.equals(truePasswordString)) {
                     Toast.makeText(context, "Welcome",
                             Toast.LENGTH_SHORT).show();
-
+                    //intent
+                    Intent intent = new Intent(MainActivity.this,
+                            ServiceActivity.class);
+                    intent.putExtra("Name", nameStrings);
+                    intent.putExtra("Image", imageStrings);
+                    startActivity(intent);
+                    finish(); //clear session ออก ไม่สามารถ เข้าไปที่หน้า Login พร้อมมี Username/password ค้างไว้
                 } else {
                     MyAlert myAlert = new MyAlert(context,
                             R.drawable.rat48,
