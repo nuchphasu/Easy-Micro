@@ -17,7 +17,7 @@ public class ServiceActivity extends AppCompatActivity {
 
         ListView listView = (ListView) findViewById(R.id.livUser);
 
-        String[] nameStrings = getIntent().getStringArrayExtra("Name");
+        final String[] nameStrings = getIntent().getStringArrayExtra("Name");
         String[] imageStrings = getIntent().getStringArrayExtra("Image");
 
         MyAdapter myAdapter = new MyAdapter(ServiceActivity.this, nameStrings, imageStrings);
@@ -27,7 +27,7 @@ public class ServiceActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Toast.makeText(ServiceActivity.this,
-                        "You click",
+                        "You click " + nameStrings[i],
                         Toast.LENGTH_LONG).show();
             }
         });
