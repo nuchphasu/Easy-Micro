@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -21,6 +22,10 @@ public class MainActivity extends AppCompatActivity {
     //Public - Private
     //ประกาศตัวแปรแบบมี type ห้อยท้าย เช่น private string name
     private Button signInButton, signUpButton;
+    private EditText userEditText, passwordEditText;
+    private String userString, passwordString;
+    private MyConstante myConstante;
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -32,11 +37,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        myConstante = new MyConstante();
 
         //Bind Widget
         signInButton = (Button) findViewById(R.id.button);
         signUpButton = (Button) findViewById(R.id.button2);
+        userEditText = (EditText) findViewById(R.id.editText4);
+        passwordEditText = (EditText) findViewById(R.id.editText5);
 
         //SignUp controller
         signUpButton.setOnClickListener(new View.OnClickListener() {
@@ -46,6 +53,33 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        signInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                //Get Value From Edit Text
+                userString = userEditText.getText().toString().trim();
+                passwordString = passwordEditText.getText().toString().trim();
+
+                //Check Space
+                if (userString.equals("")||passwordString.equals("")) {
+                    //Have Space
+                    MyAlert myAlert = new MyAlert(MainActivity.this,
+                            R.drawable.kon48,
+                            getResources().getString(R.string.title_have_space),
+                            getResources().getString(R.string.message_haveSpace));
+                    myAlert.myDialog();
+
+                } else {
+
+                }
+
+
+            }//onClick
+        });
+
+
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
