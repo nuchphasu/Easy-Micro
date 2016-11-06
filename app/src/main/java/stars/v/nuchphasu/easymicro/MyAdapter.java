@@ -8,6 +8,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 /**
  * Created by nuchphasu-v on 06/11/2016.
  */
@@ -47,7 +49,8 @@ public class MyAdapter extends BaseAdapter {
         TextView textView = (TextView) view1.findViewById(R.id.textView2);
         ImageView imageView = (ImageView) view1.findViewById(R.id.imageView3);
         textView.setText(nameStrings[i]);
+        Picasso.with(context).load(imageStrings[i]).into(imageView);
 
-        return null;
+        return view1;
     }
 }//Main Class
