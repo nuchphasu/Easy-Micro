@@ -143,6 +143,14 @@ public class SignUpActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             Log.d("6novV2","Result ==> " + s);
+            if (Boolean.parseBoolean(s)) {
+                Toast.makeText(SignUpActivity.this, "Thank you",
+                        Toast.LENGTH_SHORT).show();
+                finish();//close this page and go to first page
+            } else {
+                Toast.makeText(SignUpActivity.this, "Error Cannot save data",
+                        Toast.LENGTH_SHORT).show();
+            }
         }// onPost
     }// AddNewUser Class
 
