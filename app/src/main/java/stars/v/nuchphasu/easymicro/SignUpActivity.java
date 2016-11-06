@@ -19,6 +19,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.squareup.okhttp.FormEncodingBuilder;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.Response;
+
 import org.jibble.simpleftp.SimpleFTP;
 
 import java.io.File;
@@ -113,19 +119,30 @@ public class SignUpActivity extends AppCompatActivity {
         protected String doInBackground(String... strings) {
 
             try {
-
+                OkHttpClient okHttpClient = new OkHttpClient();
+                RequestBody requestBody = new FormEncodingBuilder()
+                        .add("isAdd", "true")
+                        .add("Name", nameString)
+                        .add("User", userString)
+                        .add("Password", passwordString)
+                        .add("Image", imageString)
+                        .build();
+                Request.Builder builder = new Request.Builder();
+                Request request = builder.url(strings[0]).post(requestBody).build();
+                Response response = okHttpClient.newCall(request).execute();
+                return response.body().string();
 
             } catch (Exception e) {
                 Log.d("6novV2", "e doInBack ==>" + e.toString());
+                return null;
             }
-            return null;
+
         }// doInBackground
 
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-
-
+            Log.d("6novV2","Result ==> " + s);
         }// onPost
     }// AddNewUser Class
 
