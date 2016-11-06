@@ -1,18 +1,27 @@
 package stars.v.nuchphasu.easymicro;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import org.jibble.simpleftp.SimpleFTP;
+
+import java.io.File;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -25,6 +34,7 @@ public class SignUpActivity extends AppCompatActivity {
             imageString, imagePathString, imageNameString;
     private Uri uri;
     private boolean aBoolean = true;
+
 
 
     @Override
@@ -70,6 +80,9 @@ public class SignUpActivity extends AppCompatActivity {
                     myAlert.myDialog();
 
                 } else {
+                    //Upload to Server
+                    upLoadImage();
+                    upLoadString();
                 }
 
             }// onClick
@@ -87,6 +100,73 @@ public class SignUpActivity extends AppCompatActivity {
         });//onclickListener
 
     }// Main Method
+
+    private class AddNewUser extends AsyncTask<String, Void, String> {
+        //Explicit
+        private Context context;
+
+        public AddNewUser(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+            try {
+
+
+            } catch (Exception e) {
+                Log.d("6novV2", "e doInBack ==>" + e.toString());
+            }
+            return null;
+        }// doInBackground
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+
+        }// onPost
+    }// AddNewUser Class
+
+    private void upLoadString() {
+        imageString = "http://swiftcodingthai.com/mic/Images" + imageNameString;
+
+        MyConstante myConstante = new MyConstante();
+        AddNewUser addNewUser = new AddNewUser(SignUpActivity.this);
+        addNewUser.execute(myConstante.getUrlAddUserString());
+
+
+    }// upLoadString
+
+    private void upLoadImage() {
+
+        //Change Policy
+        StrictMode.ThreadPolicy threadPolicy = new StrictMode.ThreadPolicy
+                .Builder().permitAll().build();
+        StrictMode.setThreadPolicy(threadPolicy);
+        //สำหรับอนุญาตให้อัพโหลดรูปภาพได้
+
+        try {
+            MyConstante myConstante = new MyConstante();
+            SimpleFTP simpleFTP = new SimpleFTP();
+            simpleFTP.connect(myConstante.getHostString(),
+                    myConstante.getPortAnInt(),
+                    myConstante.getUserString(),
+                    myConstante.getPasswordString());
+            simpleFTP.bin(); // ย่อยเป็นตัวอักษร ทำให้ข้อมูล สามารถเคลื่อนย้าย ได้ง่ายขึ้น
+            simpleFTP.cwd("Images"); // folder ที่ต้องการเข้าถึง
+            simpleFTP.stor(new File(imagePathString));
+            simpleFTP.disconnect();
+
+            Toast.makeText(SignUpActivity.this, "Upload Image Finish",
+            Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }//upLoadImage
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -114,7 +194,7 @@ public class SignUpActivity extends AppCompatActivity {
 
             //Find Name of Image Choose
             imageNameString = imagePathString.substring(imagePathString.lastIndexOf("/"));
-            Log.d("6novV1", "Path ==> " + imagePathString);
+            Log.d("6novV1", "Name ==> " + imageNameString);
 
         }//if
 
