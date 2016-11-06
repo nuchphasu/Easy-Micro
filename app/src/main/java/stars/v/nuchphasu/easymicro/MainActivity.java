@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -18,6 +19,9 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import static stars.v.nuchphasu.easymicro.R.id.button2;
 
@@ -69,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                 passwordString = passwordEditText.getText().toString().trim();
 
                 //Check Space
-                if (userString.equals("")||passwordString.equals("")) {
+                if (userString.equals("") || passwordString.equals("")) {
                     //Have Space
                     MyAlert myAlert = new MyAlert(MainActivity.this,
                             R.drawable.kon48,
@@ -81,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
                     //No Space
                     GetUser getUser = new GetUser(MainActivity.this);
                     getUser.execute(myConstante.getUrlJSoN());
-
 
 
                 }
@@ -98,8 +101,12 @@ public class MainActivity extends AppCompatActivity {
 
 
     private class GetUser extends AsyncTask<String, Void, String> {
+        //Explicit
 
         private Context context;
+        private String[] nameStrings, imageStrings;
+        private String truePasswordString;
+        private boolean aBoolean = true;
 
         public GetUser(Context context) {
             this.context = context;
@@ -124,10 +131,48 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             Log.d("6novV3", "JSON ==> " + s);
+            try {
+                JSONArray jsonArray = new JSONArray(s);
+                nameStrings = new String[jsonArray.length()];
+                imageStrings = new String[jsonArray.length()];
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                    nameStrings[i] = jsonObject.getString("Name");
+                    imageStrings[i] = jsonObject.getString("Image");
+                    //CheckLog
+                    Log.d("6novV4", "Name(" + i + ") ==> " + nameStrings[i]);
+                    if (userString.equals(jsonObject.getString("User"))) {
+                        aBoolean = false;
+                        truePasswordString = jsonObject.getString("Password");
+                    }
+                }//for
+
+                if (aBoolean) {
+                    MyAlert myAlert = new MyAlert(context,
+                            R.drawable.rat48,
+                            "User False",
+                            "No " + userString + " in my Database");
+                    myAlert.myDialog();
+                } else if (passwordString.equals(truePasswordString)) {
+                    Toast.makeText(context, "Welcome",
+                            Toast.LENGTH_SHORT).show();
+
+                } else {
+                    MyAlert myAlert = new MyAlert(context,
+                            R.drawable.rat48,
+                            "Password False",
+                            "Please Try Again Password False");
+                    myAlert.myDialog();
+                }
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }//on Post
 
     } //Class
-
 
 
     /**
